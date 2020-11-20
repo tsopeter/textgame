@@ -1,7 +1,18 @@
 module Maps where
 
-data Location = Plains | Desert | Ocean | Jungle | NoLocation | Exit deriving (Show)
+data Location = Plains | Desert | Ocean | Jungle deriving (Show, Eq)
 data Direction = N | W | S | E
+
+--displaying the map of the field
+displayMap :: IO ()
+displayMap = do
+             putStrLn ("+----------+----------+----------+") 
+             putStrLn ("|..........|..........|.<Desert>.|") 
+             putStrLn ("+----------+----------+----------+") 
+             putStrLn ("|.<Jungle>.|.<Oceans>.|.<Plains>.|") 
+             putStrLn ("+----------+----------+----------+") 
+             putStrLn ("|..........|..........|..........+") 
+             putStrLn ("+----------+----------+----------+") 
 
 directionHandler :: String -> Direction
 directionHandler x | x == "N" = N
@@ -9,21 +20,22 @@ directionHandler x | x == "N" = N
     | x == "S" = S
     | otherwise = E
 
-updateLocation :: Location -> Direction -> Location
+
+showLocation :: Maybe Location -> String
+showLocation loc = drop 5 (show loc)
+
+--updates the location
+updateLocation :: Maybe Location -> Direction -> Maybe Location
 --linking for the plains
-updateLocation Plains N = Desert
-updateLocation Plains W = Ocean
-updateLocation Plains _ = Plains
+updateLocation (Just Plains) N = Just Desert
+updateLocation (Just Plains) W = Just Ocean
 --linking for the desert
-updateLocation Desert S = Plains
-updateLocation Desert _ = Desert
+updateLocation (Just Desert) S = Just Plains
 --linking for the ocean
-updateLocation Ocean E = Plains
-updateLocation Ocean W = Jungle
-updateLocation Ocean _ = Ocean
+updateLocation (Just Ocean) E = Just Plains
+updateLocation (Just Ocean) W = Just Jungle
 --linking for the jungle
-updateLocation Jungle E = Ocean
-updateLocation Jungle _ = Jungle
+updateLocation (Just Jungle) E = Just Ocean
 --linking for NoLocation
-updateLocation NoLocation _ = NoLocation
+updateLocation _ _ = Nothing
 

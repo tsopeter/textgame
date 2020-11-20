@@ -3,25 +3,42 @@ module Main where
 --import
 import Maps
 import Lib
+import ItemsAttribute
 
+--data structures
 data State = Alive | Dead | UnusedState
 
+
+--functions for strutures
 checkState :: State -> Bool
 checkState _ = True
 checkState Dead = False
 
+
+--main function
 main :: IO ()
 main = do {
-    gameLoop (Plains, Alive)
+    --initailizes with beginning states
+    gameLoop (Just Plains, Alive)
     }
     
-gameLoop :: (Location, State) -> IO ()
+--game loop
+gameLoop :: (Maybe Location, State) -> IO ()
 gameLoop (curLocation, curState) = do {
-    putStrLn ("You are currently at " ++ show curLocation ++ ".") ;
+    displayMap ;
+    putStrLn ("You are currently at " ++ show (showLocation curLocation) ++ ".") ;
+    
+    
+    
     putStrLn "Please enter a direction: " ;
     strDir <- getLine ;
-    if strDir == "Exit" then putStrLn "Exiting game..." ;
-    else gameLoop (updateLocation curLocation (directionHandler strDir), Alive) ;
+    if strDir == "Exit" 
+    then putStrLn "Exiting game..." ;
+    else 
+        if (updateLocation curLocation (directionHandler strDir)) == Nothing
+        then do putStrLn ("You cannot go there... ") ;
+                gameLoop (curLocation, curState) ;
+        else do gameLoop (updateLocation curLocation (directionHandler strDir), curState) ;
     }
     
     
