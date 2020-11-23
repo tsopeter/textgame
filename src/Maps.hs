@@ -1,7 +1,7 @@
 module Maps where
 
 data Location = Plains | Desert | Ocean | Jungle deriving (Show, Eq)
-data Direction = N | W | S | E
+data Direction = N | W | S | E | InvalidDirection
 
 --displaying the map of the field
 displayMap :: IO ()
