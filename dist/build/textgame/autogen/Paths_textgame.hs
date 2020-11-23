@@ -26,14 +26,14 @@ catchIO :: IO a -> (Exception.IOException -> IO a) -> IO a
 catchIO = Exception.catch
 
 version :: Version
-version = Version [0,1,0,0] []
+version = Version [0,2,0,0] []
 bindir, libdir, dynlibdir, datadir, libexecdir, sysconfdir :: FilePath
 
 bindir     = "/home/petertso/.cabal/bin"
-libdir     = "/home/petertso/.cabal/lib/x86_64-linux-ghc-8.6.5/textgame-0.1.0.0-C4rIM7O7p0g5TMzO81hd71-textgame"
+libdir     = "/home/petertso/.cabal/lib/x86_64-linux-ghc-8.6.5/textgame-0.2.0.0-GDCBAuhAglMJ315d3NTeyB-textgame"
 dynlibdir  = "/home/petertso/.cabal/lib/x86_64-linux-ghc-8.6.5"
-datadir    = "/home/petertso/.cabal/share/x86_64-linux-ghc-8.6.5/textgame-0.1.0.0"
-libexecdir = "/home/petertso/.cabal/libexec/x86_64-linux-ghc-8.6.5/textgame-0.1.0.0"
+datadir    = "/home/petertso/.cabal/share/x86_64-linux-ghc-8.6.5/textgame-0.2.0.0"
+libexecdir = "/home/petertso/.cabal/libexec/x86_64-linux-ghc-8.6.5/textgame-0.2.0.0"
 sysconfdir = "/home/petertso/.cabal/etc"
 
 getBinDir, getLibDir, getDynLibDir, getDataDir, getLibexecDir, getSysconfDir :: IO FilePath
