@@ -12,3 +12,5 @@ https://www.haskell.org/cabal/
 
 If you have not ran cabal, please do so. You can use the game like so after
 running cabal, but see dist/build/textgame/.textgame to run.
+
+Note that the game was built and tested under a older version of the run command
