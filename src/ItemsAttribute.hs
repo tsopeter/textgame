@@ -20,6 +20,7 @@ remove 0 [a] = []
 remove _ [a] = [a]
 remove i xs = (take i xs) ++ (drop (i + 1) xs)
 
+
 --search Tree
 search :: (Eq a) => (Tree a) -> a -> Bool
 search TreeEmpty _ = False

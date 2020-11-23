@@ -20,7 +20,6 @@ directionHandler x | x == "N" = N
     | x == "S" = S
     | otherwise = E
 
-
 showLocation :: Maybe Location -> String
 showLocation loc = drop 5 (show loc)
 

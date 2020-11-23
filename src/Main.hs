@@ -11,7 +11,7 @@ import ItemsAttribute
 --data structures
 data State = Alive | Dead | UnusedState
 
-data GameState = GameState (Maybe Location) State [Items] [Items]
+data GameState = GameState (Maybe Location) State [[Items]] [Items]
 
 --print avaliable commands
 printCommands :: IO ()
@@ -44,8 +44,8 @@ gameMenu (GameState curLocation Alive witem pitem) = do {
             }
         Scan -> do {
             putStrLn "You look around and find...! " ;
-            printArray 0 witem ;
-            if witem == [] then do {
+            printArray 0 (getMapItems curLocation witem) ;
+            if (getMapItems curLocation witem) == [] then do {
                 putStrLn "You found nothing." ;
                 gameMenu (GameState curLocation Alive witem pitem) ;
                 }
@@ -58,7 +58,7 @@ gameMenu (GameState curLocation Alive witem pitem) = do {
                         itemIndex <- useItem ;
                         putStrLn "You picked up... " ;
                         putStrLn "You added to your storage... ";
-                        gameMenu (GameState curLocation Alive (remove itemIndex witem) (pitem ++ [(witem !! itemIndex)])) ;
+                        gameMenu (GameState curLocation Alive (remove2 curLocation witem itemIndex) (pitem ++ [((getMapItems curLocation witem) !! itemIndex)])) ;
                         }
                     otherwise -> do {
                         gameMenu (GameState curLocation Alive witem pitem) ;
@@ -97,6 +97,41 @@ gameMenu (GameState curLocation Alive witem pitem) = do {
                notUnderstand (GameState curLocation Alive witem pitem) ;
             }
     }
+    
+--define itemList
+                  --arrangement
+                  --Plains
+                  --Desert
+                  --Ocean
+                  --Jungle
+defaultItemList :: [[Items]]
+defaultItemList = [ [Apple, Apple, Orange],
+                    [],
+                    [Yuzu, Pineapple],
+                    [Apple, Orange, Pineapple, Yuzu, Yuzu]
+                    ]   
+
+--get item list
+getMapItems :: (Maybe Location) -> [[Items]] -> [Items]
+getMapItems (Just Plains) gameItems = gameItems !! 0           --first index is Plains
+getMapItems (Just Desert) gameItems = gameItems !! 1           --second index is Desert
+getMapItems (Just Ocean)  gameItems = gameItems !! 2           --thrid index is Ocean
+getMapItems (Just Jungle) gameItems = gameItems !! 3           --fourth index is Jungle
+
+--set index for combine
+setIndex :: (Maybe Location) -> Int
+setIndex (Just Plains) = 0
+setIndex (Just Desert) = 1
+setIndex (Just Ocean)  = 2
+setIndex (Just Jungle) = 3
+
+--drop and link items
+remove2 :: (Maybe Location) -> [[Items]] -> Int -> [[Items]]
+remove2 curLocation witem idx = combineMapItems curLocation witem (remove idx (getMapItems curLocation witem))
+
+--combine
+combineMapItems :: (Maybe Location) -> [[Items]] -> [Items] -> [[Items]]
+combineMapItems justLoc gItems iItems = (take (setIndex justLoc) gItems) ++ [iItems] ++ (drop ((setIndex justLoc) + 1) gItems)
 
 --useitem
 useItem :: IO Int
@@ -124,7 +159,7 @@ checkState Dead = False
 main :: IO ()
 main = do {
     --initailizes with beginning states
-    gameMenu (GameState (Just Plains) Alive [Apple] [])
+    gameMenu (GameState (Just Plains) Alive defaultItemList [])
     }
         
 command :: IO Command
