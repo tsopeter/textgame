@@ -1,6 +1,10 @@
 module Lib where
 
+--import libraries
 import Data.Char
+
+--import other modules
+import Constants
 
 --data for commands
 data Command = Look | Exit | DontUnderstand | SeeMap | Die | Scan
@@ -26,6 +30,6 @@ smoothieDesc = do {
     putStrLn "Ready to make the smoothie ? " ;
     putStrLn "Combine any 1 to 3 items to create a smoothie. " ;
     putStrLn "Then use any integer from 0 to 10 to blend the smoothie. " ;
-    putStrLn "The best smoothie will be exactly 30 points . ";
+    putStrLn ("The best smoothie will be exactly " ++ (show smoothieTotalScore) ++ " points . ");
     }
                

@@ -2,6 +2,7 @@ module ItemsAttribute where
 
 --import other modules
 import Lib
+import Constants
 
 --data strutcure
 data Tree a = TreeEmpty | Node (Tree a) a (Tree a) deriving (Show)
@@ -121,7 +122,7 @@ makeTheSmoothie pitems = do {
         let score = calculateSmoothie gotItems range in
            do {
                putStrLn ("Your score is... " ++ (show score)) ;
-               if(score  == 30)
+               if(score  == smoothieTotalScore)
                then do {
                    putStrLn "You Win! ";
                    return [ExitFruit (-1)] ;
