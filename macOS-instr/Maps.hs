@@ -11,7 +11,7 @@ displayMap = do
              putStrLn ("+----------+----------+----------+") 
              putStrLn ("|.<Jungle>.|.<Oceans>.|.<Plains>.|") 
              putStrLn ("+----------+----------+----------+") 
-             putStrLn ("|..........|..........|..........+") 
+             putStrLn ("|..........|..........|..........|") 
              putStrLn ("+----------+----------+----------+") 
 
 directionHandler :: String -> Direction
