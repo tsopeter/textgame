@@ -9,11 +9,11 @@ import Lib
 import ItemsAttribute
 
 --data structures
-data State = Alive | Dead | UnusedState
+data State = Alive | Dead | UnusedState deriving (Show)
 
 data Health a = Health a deriving (Eq, Show, Ord)
 
-data GameState = GameState (Maybe Location) State [[Items Int]] [Items Int] (Health Int)
+data GameState = GameState (Maybe Location) State [[Items Int]] [Items Int] (Health Int) deriving (Show)
 
 --print avaliable commands
 printCommands :: IO ()
@@ -25,10 +25,11 @@ printCommands = do {
 gameMenu :: GameState -> IO ()
 gameMenu (GameState curLocation Dead witem pitem health) = do {
     putStrLn "You are dead... " ;
+    pure () ;
     }
 gameMenu (GameState curLocation Alive witem pitem health) = do {
     --check fo health first
-    if checkHealth health
+    if checkToContinue (GameState curLocation Alive witem pitem health)
         then do gameMenu (GameState curLocation Dead witem pitem health) ;
         else do {
             printCommands ;
@@ -130,7 +131,11 @@ gameMenu (GameState curLocation Alive witem pitem health) = do {
                     }
                 }
     }    
-    
+
+--check status of player
+checkToContinue :: GameState -> Bool
+checkToContinue (GameState loc status witem pitem health) = (checkHealth health) || checkStatusOfGame witem pitem
+
 --show the health
 healthBar :: (Health a) -> a
 healthBar (Health a) = a   
@@ -213,6 +218,9 @@ checkState :: State -> Bool
 checkState Dead = False
 checkState _ = True 
 
+--default state
+defaultGameState :: GameState
+defaultGameState = GameState (Just Plains) Alive defaultItemList [] (Health 3)
 
 --main function
 main :: IO ()
@@ -220,10 +228,14 @@ main = do {
     putStrLn "Peter's haskell textgame" ;
     putStrLn "Your task is to make the" ;
     putStrLn "best smoothie. ";
-
+    putStrLn "------------------------" ;
     --initailizes with beginning states
-    gameMenu (GameState (Just Plains) Alive defaultItemList [] (Health 3))
+    gameMenu defaultGameState ;
     }
+
+-- for debugging
+debugMode :: GameState -> IO ()
+debugMode a = gameMenu a 
 
 -- direction IO
 directionCommand :: IO Direction
@@ -268,4 +280,8 @@ lookAround :: GameState -> IO ()
 lookAround (GameState curLocation curState witem pitem health) = do
     putStrLn ("You are at " ++ show (showLocation curLocation) ++ ".") ;
     
-    
+--check to see if both witem and pitem are empty
+--if both are empty, then throw True
+checkStatusOfGame :: [[Items Int]] -> [Items Int] -> Bool
+checkStatusOfGame [[], [], [], []] [] = True
+checkStatusOfGame _ _ = False
